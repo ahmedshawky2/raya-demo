@@ -32,7 +32,7 @@ class IndexAttachment(models.Model):
 
     def IndexingAttachmentJob(self):
 
-        all = self.env['ir.attachment'].search([('is_indexed', '=', False), ('att_content', '=', "")])
+        all = self.env['ir.attachment'].search([('is_indexed', '=', False)])
         for rec in all:
             if rec[0]['mimetype'] == "application/pdf":
 
