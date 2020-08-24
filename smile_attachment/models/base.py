@@ -28,7 +28,7 @@ class Base(models.AbstractModel):
         domain = [
             ('res_model', '=', self._name),
             '|', ('description', operator, value),
-            ('datas_fname', operator, value),
+            ('store_fname', operator, value),
         ]
         if 'ir.module.module' in self.env.registry.models and \
                 self.env['ir.module.module'].search([
