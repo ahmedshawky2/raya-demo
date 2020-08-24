@@ -39,8 +39,18 @@ class IndexAttachment(models.Model):
                 soup = BytesIO()
                 soup.write(base64.decodestring(rec[0]['db_datas']))
 
-                parsedPDF = parser.from_buffer(soup.getvalue())
-                text = parsedPDF["content"].encode('ascii', errors='ignore')
+                #parsedPDF = parser.from_buffer(soup.getvalue())
+                #text = parsedPDF["content"].encode('ascii', errors='ignore')
+
+                pdfReader = PyPDF2.PdfFileReader(BytesIO(soup.getvalue()))
+                count = pdfReader.numPages
+
+                output = []
+                for i in range(count):
+                    page = pdfReader.getPage(i)
+                    output.append(page.extractText())
+
+                text = '\n'.join(output)
 
                 rec[0]['att_content'] =  text
                 rec[0]['is_indexed'] = True
