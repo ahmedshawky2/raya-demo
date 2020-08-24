@@ -14,6 +14,7 @@ from io import StringIO
 from io import BytesIO
 from tika import parser
 import docx
+import PyPDF2
 
 __all__ = ["doc2text"]
 
@@ -74,8 +75,18 @@ class IndexAttachment(models.Model):
         if self.mimetype == "application/pdf":
             _logger.info("soup !MAGED : " + str(soup))
 
-            parsedPDF = parser.from_buffer(soup.getvalue())
-            text = parsedPDF["content"].encode('ascii', errors='ignore')
+            #parsedPDF = parser.from_buffer(soup.getvalue())
+            #text = parsedPDF["content"].encode('ascii', errors='ignore')
+
+            pdfReader = PyPDF2.PdfFileReader(BytesIO(soup.getvalue()))
+            count = pdfReader.numPages
+
+            output = []
+            for i in range(count):
+                page = pdfReader.getPage(i)
+                output.append(page.extractText())
+
+            text = '\n'.join(output)
 
             self.att_content =  text
             self.is_indexed = True
