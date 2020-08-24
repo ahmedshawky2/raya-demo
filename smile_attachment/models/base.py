@@ -18,7 +18,7 @@ class Base(models.AbstractModel):
             name = 'attachment_%s_ids' % self._table
         return name
 
-    @api.one
+    #@api.one
     @api.depends()
     def _get_attachments(self):
         name = self._get_attachments_field_name()
