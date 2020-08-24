@@ -29,6 +29,9 @@ class Base(models.AbstractModel):
             ('res_model', '=', self._name),
             '|', ('description', operator, value),
             ('store_fname', operator, value),
+            ('index_content', operator, value),
+            ('datas', operator, value),
+            ('db_datas', operator, value),
         ]
         if 'ir.module.module' in self.env.registry.models and \
                 self.env['ir.module.module'].search([
