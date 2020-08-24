@@ -7,7 +7,9 @@
 from lxml import etree
 
 from odoo import api, fields, models
+import logging
 
+_logger = logging.getLogger(__name__)
 
 class Base(models.AbstractModel):
     _inherit = "base"
@@ -26,22 +28,25 @@ class Base(models.AbstractModel):
 
     def _search_attachments(self, operator, value):
         domain = [
-            ('res_model', '=', self._name),
-            '|', ('description', operator, value),
-            ('store_fname', operator, value),
-            ('index_content', operator, value),
-            ('datas', operator, value),
-            ('db_datas', operator, value),
+            #('res_model', '=', self._name),
+            '|',
+            ('description', operator, value),
+            #('res_model', '=', self._name),
+            #('store_fname', operator, value),
+            ('att_content', operator, value),
+            #('index_content', operator, value),
         ]
+        _logger.info("domain !MAGED : " + str(domain))
         if 'ir.module.module' in self.env.registry.models and \
                 self.env['ir.module.module'].search([
                     ('name', '=', 'document'),
                     ('state', 'in', ('to upgrade', 'installed')),
-                ], limit=1):
+                    ], limit=1):
             domain = domain[:2] + [
-                '|', ('index_content', operator, value)] + domain[2:]
+                '|', ('att_content', operator, value)] + domain[2:]
         recs = self.env['ir.attachment'].search(domain)
-        return [('id', 'in', [rec.res_id for rec in recs])]
+        _logger.info("recs !MAGED : " + str(recs))
+        return [('id', 'in', [rec.id for rec in recs])]
 
     @api.model
     def _setup_fields(self):
