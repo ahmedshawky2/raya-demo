@@ -37,7 +37,7 @@ class IndexAttachment(models.Model):
             if rec[0]['mimetype'] == "application/pdf":
 
                 soup = BytesIO()
-                soup.write(base64.decodestring(rec[0]['db_datas']))
+                soup.write(base64.decodestring(rec[0]['datas']))
 
                 #parsedPDF = parser.from_buffer(soup.getvalue())
                 #text = parsedPDF["content"].encode('ascii', errors='ignore')
@@ -61,7 +61,7 @@ class IndexAttachment(models.Model):
             elif rec[0]['mimetype'] == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
 
                 soup = BytesIO()
-                soup.write(base64.decodestring(rec[0]['db_datas']))
+                soup.write(base64.decodestring(rec[0]['datas']))
 
                 doc = docx.Document(BytesIO(soup.getvalue()))
 
